@@ -6,7 +6,7 @@ import Image from 'next/image';
 interface Produto {
   id: number;
   nome: string;
-  preço: number;
+  preco: number;
   url_foto_principal: string;
   categoria: string;
 }
@@ -14,7 +14,7 @@ interface Produto {
 async function getProdutos() {
   const { data, error } = await supabase
     .from('produtos')
-    .select('id, nome, preço, url_foto_principal, categoria');
+    .select('id, nome, preco, url_foto_principal, categoria');
 
   if (error) {
     console.error('Erro ao buscar produtos:', error);
@@ -69,7 +69,7 @@ export default async function HomePage() {
                   {produto.nome}
                 </h2>
                 <p className="text-gray-700 mt-2">
-                  R$ {produto.preço ? produto.preço.toFixed(2) : '0,00'}
+                  R$ {produto.preco ? produto.preco.toFixed(2) : '0,00'}
                 </p>
                 <Link
                   href={`/produto/${produto.id}`}
