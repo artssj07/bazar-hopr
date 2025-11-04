@@ -41,25 +41,25 @@ export default async function HomePage(props: {
 
   return (
     <div className="container mx-auto p-4">
-      {/* --- ESTE É O CABEÇALHO QUE FICA SEMPRE VISÍVEL --- */}
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold text-center text-gray-800">
-          HOPR STORE - BAZAR INTERNO
+      {/* --- CABEÇALHO --- */}
+      <header className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-gray-800">
+          Hospital de Olhos do Paraná
         </h1>
+        <p className="text-2xl text-gray-700 mt-1">
+          Bazar de Equipamentos de Informática
+        </p>
       </header>
 
       {!categoriaFiltro ? (
-        <div className="flex flex-col items-center justify-center py-10">
-          
-          {/* --- IMAGEM DO CARTOON --- */}
+        <div className="flex flex-col items-center justify-center py-1">
           <Image
-            src="/desktop_bazar2.png"
+            src="/cartoon_bazar.png"
             alt="Ilustração de um computador"
-            width={180}
-            height={180}
+            width={215}
+            height={300}
             priority
           />
-      
 
           <h2 className="text-2xl font-bold text-center text-gray-800 mt-6">
             O que você deseja adquirir?
@@ -85,7 +85,6 @@ export default async function HomePage(props: {
           </div>
         </div>
       ) : (
-       
         <>
           <header className="mb-8 flex justify-between items-center">
             <div>
@@ -136,10 +135,10 @@ export default async function HomePage(props: {
 
                         {esgotado && (
                           <>
-                          {/* ESCURECIMENTO IMAGEM */}
+                           {/* ESCURECIMENTO IMAGEM */}
                             <div className="absolute inset-0 bg-gray bg-opacity-30 backdrop-blur-[3px]"></div>
 
-                            {/* CARD ESGOTADO */}
+                                 {/* CARD ESGOTADO */}
                             <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-red-600 text-white font-bold px-4 py-2 rounded-lg shadow-lg text-center">
                               ESGOTADO
                             </div>
