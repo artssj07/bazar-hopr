@@ -3,6 +3,7 @@ import { Lato } from 'next/font/google';
 import './globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
+import TermsWrapper from '@/components/TermsWrapper';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -40,9 +41,10 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="w-full">
-          {children}
-        </main>
+        <TermsWrapper>
+          <main className="w-full">{children}</main>
+        </TermsWrapper>
+        
       </body>
     </html>
   );

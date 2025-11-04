@@ -39,7 +39,7 @@ export default async function ProdutoDetalhePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const produto = await getProdutoPorId(id); // agora ela existe
+  const produto = await getProdutoPorId(id);
 
   if (!produto) {
     notFound();
@@ -60,9 +60,7 @@ export default async function ProdutoDetalhePage({
         <div className="relative h-96 w-full border rounded-lg overflow-hidden shadow-lg">
           <Image
             src={
-              produto.url_foto_principal ||
-              `https://via.placeholder.com/400x300.png?text=Sem+Foto`
-            }
+              produto.url_foto_principal}
             alt={`Foto do ${produto.nome}`}
             fill
             className="object-cover"
