@@ -1,7 +1,8 @@
-export const revalidate = 0;
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const revalidate = 0;
 
 interface Produto {
   id: number;
@@ -9,12 +10,13 @@ interface Produto {
   preco: number;
   url_foto_principal: string;
   categoria: string;
+  estoque: number;
 }
 
 async function getProdutos() {
   const { data, error } = await supabase
     .from('produtos')
-    .select('id, nome, preco, url_foto_principal, categoria');
+    .select('id, nome, preco, url_foto_principal, categoria, estoque');
 
   if (error) {
     console.error('Erro ao buscar produtos:', error);
@@ -25,7 +27,6 @@ async function getProdutos() {
 
 export default async function HomePage() {
   const produtos = await getProdutos();
-  console.log("DADOS VINDOS DO SUPABASE:",produtos);
 
   return (
     <div className="container mx-auto p-4">
@@ -46,40 +47,62 @@ export default async function HomePage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {produtos.map((produto) => (
-            <div
-              key={produto.id}
-              className="card border border-gray-200 rounded-lg shadow-md overflow-hidden"
-            >
-              <Link href={`/produto/${produto.id}`}>
-                <div className="relative h-56 w-full">
-                  <Image
-                    src={produto.url_foto_principal}
-                    alt={`Foto do ${produto.nome}`}
-                    fill
-                    className="object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
-              </Link>
-              <div className="p-4">
-                <span className="text-sm text-blue-600 font-semibold">
-                  {produto.categoria}
-                </span>
-                <h2 className="text-xl font-bold text-gray-800 truncate mt-1">
-                  {produto.nome}
-                </h2>
-                <p className="text-gray-700 mt-2">
-                  R$ {produto.preco ? produto.preco.toFixed(2) : '0,00'}
-                </p>
+          {produtos.map((produto) => {
+            const esgotado = produto.estoque <= 0;
+
+            return (
+              <div
+                key={produto.id}
+                className={`relative card border border-gray-200 rounded-lg shadow-md overflow-hidden ${
+                  esgotado ? 'opacity-80' : ''
+                }`}
+              >
                 <Link
-                  href={`/produto/${produto.id}`}
-                  className="block w-full text-center bg-green-700 text-white font-bold py-2 px-4 rounded-lg mt-4 hover:bg-green-800 transition-colors"
+                  href={esgotado ? '#' : `/produto/${produto.id}`}
+                  className={esgotado ? 'pointer-events-none' : ''}
                 >
-                  Ver Detalhes / Reservar
+                  <div className="relative h-56 w-full">
+                    <Image
+                      src={produto.url_foto_principal}
+                      alt={`Foto do ${produto.nome}`}
+                      fill
+                      className="object-cover transition-transform duration-300 hover:scale-105"
+                    />
+
+                    {esgotado && (
+                      <>
+                        {/* ESCURECIMENTO IMAGEM */}
+                         <div className="absolute inset-0 bg-gray bg-opacity-30 backdrop-blur-[3px]"></div>
+
+                        {/* CARD ESGOTADO */}
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-red-600 text-white font-bold px-4 py-2 rounded-lg shadow-lg text-center">
+                          ESGOTADO
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="p-4 bg-white">
+                    <span className="text-sm text-blue-600 font-semibold">
+                      {produto.categoria}
+                    </span>
+                    <h2 className="text-xl font-bold text-gray-800 truncate mt-1">
+                      {produto.nome}
+                    </h2>
+                    <p className="text-gray-700 mt-2">
+                      R$ {produto.preco ? produto.preco.toFixed(2) : '0,00'}
+                    </p>
+
+                    {!esgotado && (
+                      <div className="block w-full text-center bg-green-700 text-white font-bold py-2 px-4 rounded-lg mt-4 hover:bg-green-800 transition-colors">
+                        Ver Detalhes / Reservar
+                      </div>
+                    )}
+                  </div>
                 </Link>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </main>
     </div>
